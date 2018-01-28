@@ -109,7 +109,8 @@ public class AddNewNote extends AppCompatActivity implements View.OnClickListene
         if (!createNew || noteId != -1) {
             titleNote.setText(note.getTitle());
             mainTextNote.setText(note.getMainText());
-            forBackgroundNote.setBackgroundColor(note.getBackground());
+            background = note.getBackground();
+            forBackgroundNote.setBackgroundColor(background);
         }
     }
 
