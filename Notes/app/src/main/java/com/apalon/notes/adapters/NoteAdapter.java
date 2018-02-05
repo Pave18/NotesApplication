@@ -1,10 +1,10 @@
 package com.apalon.notes.adapters;
 
 import android.content.Context;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -12,67 +12,85 @@ import com.apalon.notes.R;
 import com.apalon.notes.dao.Note;
 
 import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
+import java.util.List;
 
-public class NoteAdapter extends BaseAdapter {
-    Context ctx;
-    LayoutInflater lInflater;
-    ArrayList<Note> noteArrayList;
+public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteViewHolder> {
 
-    public NoteAdapter(Context context, ArrayList<Note> notes) {
-        ctx = context;
-        noteArrayList = notes;
-        lInflater = (LayoutInflater) ctx.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-    }
+    private ItemClickListener mClickListener;
 
-    @Override
-    public int getCount() {
-        return noteArrayList.size();
-    }
+    class NoteViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-    @Override
-    public Object getItem(int position) {
-        return noteArrayList.get(position);
-    }
+        LinearLayout linearLayoutNoteItem;
+        TextView textViewTitle;
+        TextView textViewMainText;
+        TextView textViewCreated;
+        TextView textViewDate;
 
-    @Override
-    public long getItemId(int position) {
-        return noteArrayList.get(position).getId();
-    }
+        NoteViewHolder(View itemView) {
+            super(itemView);
 
-    @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-
-        View view = convertView;
-        if (view == null) {
-            view = lInflater.inflate(R.layout.item_note, parent, false);
+            linearLayoutNoteItem = itemView.findViewById(R.id.linearLayout_item_note);
+            textViewTitle = itemView.findViewById(R.id.tv_title_item_note);
+            textViewMainText = itemView.findViewById(R.id.tv_main_text_item_note);
+            textViewCreated = itemView.findViewById(R.id.tv_created_item_note);
+            textViewDate = itemView.findViewById(R.id.tv_date_item_note);
+            itemView.setOnClickListener(this);
         }
 
-        Note tempNote = getNote(position);
 
-        ((LinearLayout) view.findViewById(R.id.linearLayout_item_note))
-                .setBackgroundColor(tempNote.getBackground());
-        ((TextView) view.findViewById(R.id.tv_title_item_note)).setText(tempNote.getTitle());
-        ((TextView) view.findViewById(R.id.tv_main_text_item_note)).setText(tempNote.getMainText());
+        @Override
+        public void onClick(View v) {
+            if (mClickListener != null)
+                mClickListener.onItemClick(v, getAdapterPosition(), notes.get(getAdapterPosition()).getId());
+        }
+    }
+
+    public interface ItemClickListener {
+        void onItemClick(View view, int position, long idNote);
+    }
+
+    public void setClickListener(ItemClickListener itemClickListener) {
+        this.mClickListener = itemClickListener;
+    }
+
+    private List<Note> notes;
+    private Context context;
+
+    public NoteAdapter(List<Note> notes, Context context) {
+        this.notes = notes;
+        this.context = context;
+    }
+
+    @Override
+    public NoteViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_note, parent, false);
+        return new NoteViewHolder(v);
+    }
+
+    @Override
+    public void onBindViewHolder(NoteViewHolder holder, int position) {
+        Note tempNote = notes.get(position);
+
+        holder.linearLayoutNoteItem.setBackgroundColor(tempNote.getBackground());
+        holder.textViewTitle.setText(tempNote.getTitle());
+        holder.textViewMainText.setText(tempNote.getMainText());
+
         String tempString;
-        if (tempNote.getCreateOrUpdate()) {
-            tempString = ctx.getString(R.string.title_created);
+        if (tempNote.getCreated()) {
+            tempString = context.getResources().getString(R.string.title_created);
         } else {
-            tempString = ctx.getString(R.string.title_updated);
+            tempString = context.getResources().getString(R.string.title_updated);
         }
-        ((TextView) view.findViewById(R.id.tv_create_of_update_item_note)).setText(tempString);
+        holder.textViewCreated.setText(tempString);
 
-        SimpleDateFormat df = new SimpleDateFormat("yyyy/MM/dd HH:mm");
-        String formattedDate = df.format(tempNote.getDate());
+        String tempDate = DateFormat.getTimeInstance(DateFormat.SHORT).format(tempNote.getDate()) + " "
+                + DateFormat.getDateInstance(DateFormat.DATE_FIELD).format(tempNote.getDate());
 
-        ((TextView) view.findViewById(R.id.tv_date_item_note))
-                .setText(formattedDate);
-
-        return view;
+        holder.textViewDate.setText(tempDate);
     }
 
-    Note getNote(int position) {
-        return (Note) getItem(position);
+    @Override
+    public int getItemCount() {
+        return notes.size();
     }
 }

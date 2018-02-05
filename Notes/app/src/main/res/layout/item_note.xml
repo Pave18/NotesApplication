@@ -33,7 +33,7 @@
         android:orientation="horizontal">
 
         <TextView
-            android:id="@+id/tv_create_of_update_item_note"
+            android:id="@+id/tv_created_item_note"
             style="@style/Base.TextAppearance.AppCompat.Small"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

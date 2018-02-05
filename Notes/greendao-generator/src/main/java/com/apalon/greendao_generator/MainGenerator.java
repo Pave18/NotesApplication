@@ -24,7 +24,7 @@ public class MainGenerator {
         note.addStringProperty("title");
         note.addStringProperty("mainText");
         note.addIntProperty("background");
-        note.addBooleanProperty("createOrUpdate");
+        note.addBooleanProperty("created");
         note.addDateProperty("date");
         return note;
     }

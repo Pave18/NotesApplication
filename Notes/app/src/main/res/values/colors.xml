@@ -10,4 +10,5 @@
     <color name="background_green">#0ba906</color>
     <color name="background_blue">#0800ff</color>
     <color name="background_yellow">#c4ff00</color>
+    <color name="background_pink">#ff0099</color>
 </resources>

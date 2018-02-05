@@ -5,9 +5,6 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
-import android.support.constraint.ConstraintLayout;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -26,21 +23,18 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.Objects;
 
 
 public class AddNewNote extends AppCompatActivity implements View.OnClickListener {
 
-    Boolean createNew;
-    Long noteId;
-
     ManageNotes manageNote;
+
+    Boolean createNew;
     Note note;
 
-    ConstraintLayout forBackgroundNote;
     EditText titleNote;
     EditText mainTextNote;
-    int background;
+    int backgroundColorNote;
 
     List<ImageView> backgroundColors;
 
@@ -48,16 +42,7 @@ public class AddNewNote extends AppCompatActivity implements View.OnClickListene
     private void readIntent(Intent intent) {
         if (intent != null) {
             createNew = intent.getBooleanExtra("create", true);
-            noteId = intent.getLongExtra("noteId", (long) -1);
-
-            List<Note> notesList = manageNote.getAllNotes();
-
-            for (Note n : notesList) {
-                if (Objects.equals(n.getId(), noteId)) {
-                    note = n;
-                    break;
-                }
-            }
+            note = manageNote.getNoteById(intent.getLongExtra("noteId", -1));
         }
     }
 
@@ -68,13 +53,10 @@ public class AddNewNote extends AppCompatActivity implements View.OnClickListene
         setContentView(R.layout.activity_add_new_note);
 
         manageNote = new ManageNotes();
-        note = new Note();
 
         readIntent(getIntent());
 
-        background = getResources().getColor(R.color.transparent);
-
-        forBackgroundNote = findViewById(R.id.constraintLayout_note);
+        backgroundColorNote = getResources().getColor(R.color.transparent);
 
         Toolbar toolbar = findViewById(R.id.toolbar_add_or_update_note);
         if (createNew) {
@@ -91,27 +73,34 @@ public class AddNewNote extends AppCompatActivity implements View.OnClickListene
         titleNote = findViewById(R.id.et_title_note);
         mainTextNote = findViewById(R.id.et_main_text_note);
 
+        //
         backgroundColors = new ArrayList<>();
         backgroundColors.add((ImageView) findViewById(R.id.circle_default));
         backgroundColors.add((ImageView) findViewById(R.id.circle_blue));
         backgroundColors.add((ImageView) findViewById(R.id.circle_red));
         backgroundColors.add((ImageView) findViewById(R.id.circle_green));
         backgroundColors.add((ImageView) findViewById(R.id.circle_yellow));
+        backgroundColors.add((ImageView) findViewById(R.id.circle_pink));
 
         for (ImageView iv : backgroundColors) {
             iv.setOnClickListener(this);
         }
 
-        forUpdate();
+        updatingUI();
     }
 
-    private void forUpdate() {
-        if (!createNew || noteId != -1) {
+    private void updatingUI() {
+        if (!createNew) {
             titleNote.setText(note.getTitle());
             mainTextNote.setText(note.getMainText());
-            background = note.getBackground();
-            forBackgroundNote.setBackgroundColor(background);
+            backgroundColorNote = note.getBackground();
+            updateBackground();
         }
+    }
+
+    private void updateBackground() {
+        titleNote.setBackgroundColor(backgroundColorNote);
+        mainTextNote.setBackgroundColor(backgroundColorNote);
     }
 
     @Override
@@ -166,12 +155,11 @@ public class AddNewNote extends AppCompatActivity implements View.OnClickListene
         String mess = "";
         if (createNew) {
             mess = getString(R.string.title_note_insert);
-            manageNote.addNote(titleNote.getText().toString(), mainTextNote.getText().toString(),
-                    createNew, getDateNow(), background);
+            manageNote.addNote(titleNote, mainTextNote, createNew, getDateNow(), backgroundColorNote);
         } else {
             mess = getString(R.string.title_note_updated);
-            manageNote.updateNote(note, titleNote.getText().toString(), mainTextNote.getText().toString(),
-                    createNew, getDateNow(), background);
+            manageNote.updateNote(note,
+                    titleNote, mainTextNote, createNew, getDateNow(), backgroundColorNote);
         }
 
         Toast.makeText(this, mess, Toast.LENGTH_SHORT).show();
@@ -185,25 +173,24 @@ public class AddNewNote extends AppCompatActivity implements View.OnClickListene
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.circle_default:
-                background = getResources().getColor(R.color.transparent);
-                forBackgroundNote.setBackgroundResource(R.color.transparent);
+                backgroundColorNote = getResources().getColor(R.color.transparent);
                 break;
             case R.id.circle_red:
-                background = getResources().getColor(R.color.background_red);
-                forBackgroundNote.setBackgroundResource(R.color.background_red);
+                backgroundColorNote = getResources().getColor(R.color.background_red);
                 break;
             case R.id.circle_green:
-                background = getResources().getColor(R.color.background_green);
-                forBackgroundNote.setBackgroundResource(R.color.background_green);
+                backgroundColorNote = getResources().getColor(R.color.background_green);
                 break;
             case R.id.circle_blue:
-                background = getResources().getColor(R.color.background_blue);
-                forBackgroundNote.setBackgroundResource(R.color.background_blue);
+                backgroundColorNote = getResources().getColor(R.color.background_blue);
                 break;
             case R.id.circle_yellow:
-                background = getResources().getColor(R.color.background_yellow);
-                forBackgroundNote.setBackgroundResource(R.color.background_yellow);
+                backgroundColorNote = getResources().getColor(R.color.background_yellow);
+                break;
+            case R.id.circle_pink:
+                backgroundColorNote = getResources().getColor(R.color.background_pink);
                 break;
         }
+        updateBackground();
     }
 }

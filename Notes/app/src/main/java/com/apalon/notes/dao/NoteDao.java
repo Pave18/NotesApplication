@@ -26,7 +26,7 @@ public class NoteDao extends AbstractDao<Note, Long> {
         public final static Property Title = new Property(1, String.class, "title", false, "TITLE");
         public final static Property MainText = new Property(2, String.class, "mainText", false, "MAIN_TEXT");
         public final static Property Background = new Property(3, Integer.class, "background", false, "BACKGROUND");
-        public final static Property CreateOrUpdate = new Property(4, Boolean.class, "createOrUpdate", false, "CREATE_OR_UPDATE");
+        public final static Property Created = new Property(4, Boolean.class, "created", false, "CREATED");
         public final static Property Date = new Property(5, java.util.Date.class, "date", false, "DATE");
     }
 
@@ -47,7 +47,7 @@ public class NoteDao extends AbstractDao<Note, Long> {
                 "\"TITLE\" TEXT," + // 1: title
                 "\"MAIN_TEXT\" TEXT," + // 2: mainText
                 "\"BACKGROUND\" INTEGER," + // 3: background
-                "\"CREATE_OR_UPDATE\" INTEGER," + // 4: createOrUpdate
+                "\"CREATED\" INTEGER," + // 4: created
                 "\"DATE\" INTEGER);"); // 5: date
     }
 
@@ -81,9 +81,9 @@ public class NoteDao extends AbstractDao<Note, Long> {
             stmt.bindLong(4, background);
         }
  
-        Boolean createOrUpdate = entity.getCreateOrUpdate();
-        if (createOrUpdate != null) {
-            stmt.bindLong(5, createOrUpdate ? 1L: 0L);
+        Boolean created = entity.getCreated();
+        if (created != null) {
+            stmt.bindLong(5, created ? 1L: 0L);
         }
  
         java.util.Date date = entity.getDate();
@@ -116,9 +116,9 @@ public class NoteDao extends AbstractDao<Note, Long> {
             stmt.bindLong(4, background);
         }
  
-        Boolean createOrUpdate = entity.getCreateOrUpdate();
-        if (createOrUpdate != null) {
-            stmt.bindLong(5, createOrUpdate ? 1L: 0L);
+        Boolean created = entity.getCreated();
+        if (created != null) {
+            stmt.bindLong(5, created ? 1L: 0L);
         }
  
         java.util.Date date = entity.getDate();
@@ -139,7 +139,7 @@ public class NoteDao extends AbstractDao<Note, Long> {
             cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // title
             cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // mainText
             cursor.isNull(offset + 3) ? null : cursor.getInt(offset + 3), // background
-            cursor.isNull(offset + 4) ? null : cursor.getShort(offset + 4) != 0, // createOrUpdate
+            cursor.isNull(offset + 4) ? null : cursor.getShort(offset + 4) != 0, // created
             cursor.isNull(offset + 5) ? null : new java.util.Date(cursor.getLong(offset + 5)) // date
         );
         return entity;
@@ -151,7 +151,7 @@ public class NoteDao extends AbstractDao<Note, Long> {
         entity.setTitle(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
         entity.setMainText(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
         entity.setBackground(cursor.isNull(offset + 3) ? null : cursor.getInt(offset + 3));
-        entity.setCreateOrUpdate(cursor.isNull(offset + 4) ? null : cursor.getShort(offset + 4) != 0);
+        entity.setCreated(cursor.isNull(offset + 4) ? null : cursor.getShort(offset + 4) != 0);
         entity.setDate(cursor.isNull(offset + 5) ? null : new java.util.Date(cursor.getLong(offset + 5)));
      }
     

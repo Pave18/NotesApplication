@@ -30,15 +30,15 @@
         android:id="@+id/horizontalScrollView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/appBarLayout">
 
         <LinearLayout
-            android:id="@+id/linealLayout_color"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center"
             android:orientation="horizontal">
 
             <ImageView
@@ -66,45 +66,45 @@
                 style="@style/AppTheme.Circle"
                 android:src="@drawable/ic_circle_background_red_24dp" />
 
+            <ImageView
+                android:id="@+id/circle_pink"
+                style="@style/AppTheme.Circle"
+                android:src="@drawable/ic_circle_background_pink_24dp" />
         </LinearLayout>
     </HorizontalScrollView>
 
-
-    <LinearLayout
-        android:id="@+id/linearLayout_note"
+    <EditText
+        android:id="@+id/et_title_note"
+        style="@style/Base.TextAppearance.AppCompat.Title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="top"
-        android:minHeight="400dp"
-        android:orientation="vertical"
-        android:padding="5dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:hint="@string/title"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/horizontalScrollView"
-        app:layout_constraintVertical_bias="0.0"
-        tools:ignore="MissingConstraints">
+        app:layout_constraintTop_toBottomOf="@+id/horizontalScrollView" />
 
-
-        <EditText
-            android:id="@+id/et_title_note"
-            style="@style/Base.TextAppearance.AppCompat.Title"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/title" />
-
+    <ScrollView
+        android:id="@+id/scrollView2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/et_title_note">
 
         <EditText
             android:id="@+id/et_main_text_note"
             style="@style/Base.TextAppearance.AppCompat.Body1"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
             android:background="@android:color/transparent"
             android:gravity="top"
-            android:hint="@string/main_text" />
-
-
-    </LinearLayout>
+            android:hint="@string/main_text"
+            android:minHeight="200dp"
+            android:layout_height="wrap_content" />
+    </ScrollView>
 
 
 </android.support.constraint.ConstraintLayout>
