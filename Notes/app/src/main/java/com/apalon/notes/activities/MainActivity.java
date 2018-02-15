@@ -2,29 +2,30 @@ package com.apalon.notes.activities;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.RequiresApi;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.view.ContextMenu;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.apalon.notes.R;
 import com.apalon.notes.adapters.NoteAdapter;
+import com.apalon.notes.adapters.OnRecycleViewItemClickListener;
 import com.apalon.notes.bal.ManageNotes;
 import com.apalon.notes.dao.Note;
+import com.apalon.notes.dialogs.AboutDialog;
 
-import java.util.ArrayList;
+public class MainActivity extends AppCompatActivity {
 
-public class MainActivity extends AppCompatActivity implements NoteAdapter.ItemClickListener {
+    final int REQUEST_FOR_CREATE = 1;
+    final int REQUEST_FOR_UPDATE = 2;
+
     ManageNotes manageNotes;
     NoteAdapter noteAdapter;
     RecyclerView rvNotes;
@@ -38,12 +39,20 @@ public class MainActivity extends AppCompatActivity implements NoteAdapter.ItemC
 
         manageNotes = new ManageNotes();
 
-        noteAdapter = new NoteAdapter(manageNotes.getAllNotes(), this);
-        noteAdapter.setClickListener(this);
+
+        noteAdapter = new NoteAdapter(manageNotes.getAllNotes());
+        noteAdapter.setOnItemClickListener(new OnRecycleViewItemClickListener<Note>() {
+            @Override
+            public void onItemClick(View view, Note note) {
+                showPopupMenu(view, note);
+            }
+        });
+
 
         rvNotes = findViewById(R.id.lv_notes);
-        rvNotes.setLayoutManager(new LinearLayoutManager(this));
         rvNotes.setAdapter(noteAdapter);
+        rvNotes.setLayoutManager(new GridLayoutManager(this, 2));
+
 
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -52,6 +61,23 @@ public class MainActivity extends AppCompatActivity implements NoteAdapter.ItemC
                 startActivityAddNewNote();
             }
         });
+    }
+
+    // This is necessary to add or update an element to the adapter
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == RESULT_OK) {
+            long noteId = data.getLongExtra("noteId", -1);
+
+            switch (requestCode) {
+                case REQUEST_FOR_CREATE:
+                    noteAdapter.add(manageNotes.getNoteById(noteId), noteAdapter.getItemCount());
+                    break;
+                case REQUEST_FOR_UPDATE:
+                    noteAdapter.update(manageNotes.getNoteById(noteId));
+                    break;
+            }
+        }
     }
 
     @Override
@@ -65,14 +91,8 @@ public class MainActivity extends AppCompatActivity implements NoteAdapter.ItemC
         int id = item.getItemId();
 
         if (id == R.id.action_about) {
-            AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
-            alertDialog.setTitle(R.string.action_about)
-                    .setMessage(R.string.message_about)
-                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                        }
-                    })
-                    .show();
+            AboutDialog aboutDialog = new AboutDialog();
+            aboutDialog.show(getFragmentManager(), "AboutDialog");
             return true;
         }
 
@@ -81,47 +101,32 @@ public class MainActivity extends AppCompatActivity implements NoteAdapter.ItemC
 
     //For create
     private void startActivityAddNewNote() {
-        Intent intent = new Intent(this, AddNewNote.class);
+        Intent intent = new Intent(this, AddNewNoteActivity.class);
         intent.putExtra("create", true);
-        startActivity(intent);
-        noteAdapter.notifyItemInserted(noteAdapter.getItemCount());
+        startActivityForResult(intent, REQUEST_FOR_CREATE);
     }
 
     //For update
     private void startActivityAddNewNote(Note note) {
-        Intent intent = new Intent(this, AddNewNote.class);
+        Intent intent = new Intent(this, AddNewNoteActivity.class);
         intent.putExtra("create", false);
         intent.putExtra("noteId", note.getId());
-        startActivity(intent);
+        startActivityForResult(intent, REQUEST_FOR_UPDATE);
     }
 
-    @Override
-    public void onItemClick(View view, int position, long idNote) {
-        showPopupMenu(view, position, idNote);
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-        noteAdapter.notifyDataSetChanged();
-    }
-
-    private void showPopupMenu(View v, final int position, final long idNote) {
+    private void showPopupMenu(View v, final Note note) {
         PopupMenu popupMenu = new PopupMenu(this, v);
         popupMenu.inflate(R.menu.popupmenu_note);
 
         popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-            @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-            @Override
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.action_delete:
-                        manageNotes.delNote(idNote);
+                        manageNotes.delNote(note);
+                        noteAdapter.remove(note);
                         return true;
                     case R.id.action_update:
-                        startActivityAddNewNote(manageNotes.getNoteById(idNote));
-
+                        startActivityAddNewNote(note);
                         return true;
                     default:
                         return false;
@@ -131,6 +136,4 @@ public class MainActivity extends AppCompatActivity implements NoteAdapter.ItemC
 
         popupMenu.show();
     }
-
-
 }

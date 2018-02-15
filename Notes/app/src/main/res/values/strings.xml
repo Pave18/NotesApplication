@@ -14,6 +14,9 @@
     <string name="title_created">created</string>
     <string name="title_updated">updated</string>
     <string name="title_note_delete">Note delete</string>
-    <string name="action_about">About</string>
-    <string name="message_about">Create by Egor Pavlenko</string>
+    <string name="title_about">About</string>
+    <string name="about_programmer">Egor Pavlenko</string>
+    <string name="about_design">Denis Runets</string>
+    <string name="title_designer">Designer:</string>
+    <string name="title_developer">Developer:</string>
 </resources>

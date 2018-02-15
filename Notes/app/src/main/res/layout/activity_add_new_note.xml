@@ -5,7 +5,7 @@
     android:id="@+id/constraintLayout_note"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.apalon.notes.activities.AddNewNote">
+    tools:context="com.apalon.notes.activities.AddNewNoteActivity">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appBarLayout"
@@ -43,33 +43,64 @@
 
             <ImageView
                 android:id="@+id/circle_default"
-                style="@style/AppTheme.Circle"
-                android:src="@drawable/ic_circle_background_default_24dp" />
-
-            <ImageView
-                android:id="@+id/circle_green"
-                style="@style/AppTheme.Circle"
-                android:src="@drawable/ic_circle_background_green_24dp" />
-
-            <ImageView
-                android:id="@+id/circle_blue"
-                style="@style/AppTheme.Circle"
-                android:src="@drawable/ic_circle_background_blue_24dp" />
-
-            <ImageView
-                android:id="@+id/circle_yellow"
-                style="@style/AppTheme.Circle"
-                android:src="@drawable/ic_circle_background_yellow_24dp" />
+                style="@style/AppTheme.Circle" />
 
             <ImageView
                 android:id="@+id/circle_red"
                 style="@style/AppTheme.Circle"
-                android:src="@drawable/ic_circle_background_red_24dp" />
+                android:tint="@color/background_red" />
+
+            <ImageView
+                android:id="@+id/circle_orange"
+                style="@style/AppTheme.Circle"
+                android:tint="@color/background_orange" />
+
+            <ImageView
+                android:id="@+id/circle_yellow"
+                style="@style/AppTheme.Circle"
+                android:tint="@color/background_yellow"/>
+
+            <ImageView
+                android:id="@+id/circle_green"
+                style="@style/AppTheme.Circle"
+                android:tint="@color/background_green"/>
+
+            <ImageView
+                android:id="@+id/circle_aeroblue"
+                style="@style/AppTheme.Circle"
+                android:tint="@color/background_aeroblue" />
+
+            <ImageView
+                android:id="@+id/circle_malibu"
+                style="@style/AppTheme.Circle"
+                android:tint="@color/background_malibu" />
+
+            <ImageView
+                android:id="@+id/circle_blue"
+                style="@style/AppTheme.Circle"
+                android:tint="@color/background_blue"/>
+
+            <ImageView
+                android:id="@+id/circle_heliotrope"
+                style="@style/AppTheme.Circle"
+                android:tint="@color/background_heliotrope"/>
 
             <ImageView
                 android:id="@+id/circle_pink"
                 style="@style/AppTheme.Circle"
-                android:src="@drawable/ic_circle_background_pink_24dp" />
+                android:tint="@color/background_pink"/>
+
+            <ImageView
+                android:id="@+id/circle_swirl"
+                style="@style/AppTheme.Circle"
+                android:tint="@color/background_swirl"/>
+
+            <ImageView
+                android:id="@+id/circle_iron"
+                style="@style/AppTheme.Circle"
+                android:tint="@color/background_iron"/>
+
+
         </LinearLayout>
     </HorizontalScrollView>
 
@@ -99,11 +130,11 @@
             android:id="@+id/et_main_text_note"
             style="@style/Base.TextAppearance.AppCompat.Body1"
             android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:background="@android:color/transparent"
             android:gravity="top"
             android:hint="@string/main_text"
-            android:minHeight="200dp"
-            android:layout_height="wrap_content" />
+            android:minHeight="200dp" />
     </ScrollView>
 
 

@@ -6,7 +6,7 @@ import org.greenrobot.greendao.generator.Schema;
 
 public class MainGenerator {
     public static void main(String[] args) {
-        Schema schema = new Schema(1, "com.apalon.notes.dao");
+        Schema schema = new Schema(1, "com.apalon.notes.ff");
         schema.enableKeepSectionsByDefault();
 
         addNoteEntities(schema);

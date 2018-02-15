@@ -58,19 +58,23 @@ public class ManageNotes {
         noteDao.deleteByKey(id);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+
     public Note getNoteById(long id) {
 
         List<Note> notesList = getAllNotes();
         Note note = new Note();
 
         for (Note n : notesList) {
-            if (Objects.equals(n.getId(), id)) {
+            if (n.getId() == id) {
                 note = n;
                 break;
             }
         }
 
         return note;
+    }
+
+    public Note getLastNote() {
+        return getAllNotes().get(getAllNotes().size() - 1);
     }
 }

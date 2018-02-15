@@ -57,7 +57,7 @@ public class DaoMaster extends AbstractDaoMaster {
     }
 
     /**
-     * Calls {@link #createAllTables(Database, boolean)} in {@link #onCreate(Database)} -
+     * Calls {@link #createAllTables(Database, boolean)} ic_logo_linkedin_24dp {@link #onCreate(Database)} -
      */
     public static abstract class OpenHelper extends DatabaseOpenHelper {
         public OpenHelper(Context context, String name) {
