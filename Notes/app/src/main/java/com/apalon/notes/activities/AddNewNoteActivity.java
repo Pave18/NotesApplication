@@ -2,9 +2,7 @@ package com.apalon.notes.activities;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.RequiresApi;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -178,7 +176,10 @@ public class AddNewNoteActivity extends AppCompatActivity implements View.OnClic
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
+
+        int id = v.getId();
+
+        switch (id) {
             case R.id.circle_default:
                 backgroundColorNote = getResources().getColor(R.color.transparent);
                 break;
